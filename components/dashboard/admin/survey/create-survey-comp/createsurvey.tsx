@@ -21,6 +21,7 @@ export default function CreateSurvey() {
         ) : step === 2 ? (
           <SurveyParts setStep={setStep} step={step} />
         ) : step === 3 ? (
+          //@ts-ignore
           <SurveyTitle  setStep={setStep} step={step}  />
         ) : (
           ""

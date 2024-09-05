@@ -15,6 +15,7 @@ export interface partnerDonwload{
     survey_downloaded:number
 }
 
+
 export interface recentSurveys{
     caption:string,
     published:true,

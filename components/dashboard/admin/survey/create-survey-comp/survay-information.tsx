@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { createServay } from '@/redux/services/admin/admin';
 import local from 'next/font/local';
+import { toast } from 'react-toastify';
 
 interface SurveyPartsProps {
   setStep: (step: number) => void;
@@ -18,12 +19,14 @@ export default function SurvayInformation({ setStep }: SurveyPartsProps) {
   const [date, setDate] = useState('');
   const [additionalComment, setAdditionalComment] = useState('');
   const [isPublished, setIsPublished] = useState(false); 
+  const [load,setLoad] = useState(false);
 
   const handleSubmit = async () => {
     try {
+      setLoad(true);
 
       if (!date || !time) {
-        alert("Error: Date and time must be provided.");
+        toast.error("Date and time is required")
         return;
       }
   
@@ -51,7 +54,7 @@ export default function SurvayInformation({ setStep }: SurveyPartsProps) {
   
       for (const [key, value] of Object.entries(allData)) {
         if (key !== 'published' && !value) {
-          alert(`Error: The field "${key}" cannot be empty.`);
+          toast.error(`Error: The field "${key}" cannot be empty.`)
           return;
         }
       }  
@@ -62,6 +65,9 @@ export default function SurvayInformation({ setStep }: SurveyPartsProps) {
       }
     } catch (error) {
       console.error("error", error);
+    }
+    finally{
+      setLoad(false);
     }
   };
   
@@ -134,8 +140,11 @@ export default function SurvayInformation({ setStep }: SurveyPartsProps) {
         </div>
 
         <div className="w-full p-2 mt-4">
-          <Button className="w-full py-2 text-[16px] font-[500]" onClick={handleSubmit}>
-            Next
+          <Button className={`w-full py-2 text-[16px] font-[500] ${load?" opacity-50 cursor-not-allowed":""}`} onClick={handleSubmit}>
+            {
+              load ? <span className='load' />:"Next"
+            }
+            
           </Button>
           <Link href="/admin/survey/manage/">
             <Button className="w-full py-2 text-[16px] font-[500]" variant="solid">
